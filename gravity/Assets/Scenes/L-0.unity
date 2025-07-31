@@ -1087,6 +1087,10 @@ PrefabInstance:
       propertyPath: mobileInputs
       value: 
       objectReference: {fileID: 635548000}
+    - target: {fileID: 8011442454234375101, guid: 14fa744cddfce3147877a54736a55349, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ButtonCounterPressed
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
