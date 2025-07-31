@@ -124,7 +124,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   minReboundSpeed: 1.5
-  originOffset: 0.001
   maxJumps: 1
   maxReflections: 100
   jumpsText: {fileID: 7604348026696232959}
