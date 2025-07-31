@@ -132,7 +132,7 @@ public class PlayerMove : MonoBehaviour
             if (isCounter && _currentVelocity.magnitude > 0.1f)
                 _aimDirection = -_currentVelocity.normalized;
             else if (!isCounter)
-                _aimDirection = _input.GetAimDirection(_cam, transform.position);
+                _aimDirection = _input.GetAimDirection();
 
             if (_aimDirection != Vector2.zero)
                 DrawPredictionLine(_aimDirection);
