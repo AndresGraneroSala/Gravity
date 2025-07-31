@@ -126,7 +126,7 @@ public class PlayerMove : MonoBehaviour
         bool isAiming = _input.IsAiming();
         bool isCounter = _input.IsCountering();
 
-        if (isAiming)
+        if (isAiming||isCounter)
         {
             _lineRenderer.enabled = true;
             if (isCounter && _currentVelocity.magnitude > 0.1f)
@@ -143,7 +143,7 @@ public class PlayerMove : MonoBehaviour
             ClearImpactMarkers();
         }
 
-        if (_aimDirection != Vector2.zero && _input.IsLaunchPressed() && isAiming)
+        if (_aimDirection != Vector2.zero && _input.IsLaunchPressed() && (isAiming|| isCounter))
         {
             UpdateJumpText();
 

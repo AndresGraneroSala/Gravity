@@ -8,12 +8,26 @@ public class PlayerController : MonoBehaviour
 {
     // Lectura directa de inputs que usará PlayerMove
 
+    [SerializeField] private GameObject mobileInputs;
+    
     private Camera _cam;
     private bool _uiLaunchRequested;
+    private bool _uiCounteringRequested;
+
+
+    private void Awake()
+    {
+        mobileInputs.SetActive(false);
+    }
 
     private void Start()
     {
         _cam = Camera.main;
+
+        if (GameManager.IsMobileDevice())
+        {
+            mobileInputs.SetActive(true);
+        }
     }
 
     public bool IsAiming()
@@ -21,7 +35,7 @@ public class PlayerController : MonoBehaviour
         Vector2 keyboardInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         Vector2 gamepadInput = Gamepad.current != null ? Gamepad.current.leftStick.ReadValue() : Vector2.zero;
         bool mousePressed = Mouse.current != null && Mouse.current.leftButton.isPressed;
-        
+
         bool touchPressed = Input.touchCount > 0;
         if (touchPressed)
         {
@@ -29,14 +43,14 @@ public class PlayerController : MonoBehaviour
             if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
                 touchPressed = false;
         }
-        
-        return keyboardInput.sqrMagnitude > 0.1f || gamepadInput.sqrMagnitude > 0.01f || mousePressed|| touchPressed;
+
+        return keyboardInput.sqrMagnitude > 0.1f || gamepadInput.sqrMagnitude > 0.01f || mousePressed || touchPressed;
     }
 
     public Vector2 GetAimDirection()
     {
-        Vector2 playerPos =(Vector2) transform.position;
-        
+        Vector2 playerPos = (Vector2)transform.position;
+
         Vector2 keyboardInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         Vector2 gamepadInput = Gamepad.current != null ? Gamepad.current.leftStick.ReadValue() : Vector2.zero;
         Vector2 mousePos = _cam.ScreenToWorldPoint(Mouse.current?.position.ReadValue() ?? Vector2.zero);
@@ -52,7 +66,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        
+
         if (gamepadInput.sqrMagnitude > 0.1f) return gamepadInput.normalized;
         if (keyboardInput.sqrMagnitude > 0.1f) return keyboardInput.normalized;
         if (mousePos != Vector2.zero && mousePos != (Vector2)playerPos) return dirMouse;
@@ -66,7 +80,11 @@ public class PlayerController : MonoBehaviour
         bool lb = Gamepad.current != null && Gamepad.current.leftShoulder.isPressed;
         bool l3 = Gamepad.current != null && Gamepad.current.leftStickButton.isPressed;
 
-        return shift || lb || l3;
+        bool wasPressed = shift || lb || l3 || _uiCounteringRequested;
+
+        _uiCounteringRequested = false;
+
+        return wasPressed;
     }
 
     public bool IsLaunchPressed()
@@ -78,7 +96,8 @@ public class PlayerController : MonoBehaviour
 
         _uiLaunchRequested = false;
 
-        return wasPressed;    }
+        return wasPressed;
+    }
 
     public bool IsPausePressed()
     {
@@ -91,6 +110,12 @@ public class PlayerController : MonoBehaviour
     public void ButtonLaunchPressed()
     {
         _uiLaunchRequested = true;
+
+    }
+
+    public void ButtonCounterPressed()
+    {
+        _uiCounteringRequested = true;
 
     }
 }

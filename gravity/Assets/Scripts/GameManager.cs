@@ -1,24 +1,42 @@
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Runtime.InteropServices;
 
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+
+
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
 #if UNITY_EDITOR
-    [SerializeField]
-    private SceneAsset[] levels; // Solo visible y usable en el editor
+    [SerializeField] private SceneAsset[] levels; // Solo visible y usable en el editor
 #endif
 
-    [SerializeField, HideInInspector]
-    private string[] levelPaths; // Usado en runtime (builds)
+    [SerializeField, HideInInspector] private string[] levelPaths; // Usado en runtime (builds)
 
     private int _currentLevel = 0;
+
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+    [DllImport("__Internal")]
+    private static extern int IsMobile();
+#endif
+
+    public static bool IsMobileDevice()
+    {
+#if UNITY_WEBGL && !UNITY_EDITOR
+        return IsMobile() == 1;
+#else
+        // En plataforma local, puedes usar esto como fallback
+        return Application.isMobilePlatform;
+#endif
+    }
+    
 
     private void Awake()
     {
