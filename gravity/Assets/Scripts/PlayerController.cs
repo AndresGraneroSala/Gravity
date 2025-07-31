@@ -21,8 +21,15 @@ public class PlayerController : MonoBehaviour
         Vector2 keyboardInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         Vector2 gamepadInput = Gamepad.current != null ? Gamepad.current.leftStick.ReadValue() : Vector2.zero;
         bool mousePressed = Mouse.current != null && Mouse.current.leftButton.isPressed;
-        bool touchPressed = Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId);
-
+        
+        bool touchPressed = Input.touchCount > 0;
+        if (touchPressed)
+        {
+            Touch touch = Input.GetTouch(0);
+            if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+                touchPressed = false;
+        }
+        
         return keyboardInput.sqrMagnitude > 0.1f || gamepadInput.sqrMagnitude > 0.01f || mousePressed|| touchPressed;
     }
 
@@ -35,17 +42,20 @@ public class PlayerController : MonoBehaviour
         Vector2 mousePos = _cam.ScreenToWorldPoint(Mouse.current?.position.ReadValue() ?? Vector2.zero);
         Vector2 dirMouse = (mousePos - (Vector2)playerPos).normalized;
 
-        Vector2 touchPos = (Input.touchCount > 0 && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId)) 
-            ? _cam.ScreenToWorldPoint((Vector2)Input.GetTouch(0).position) 
-            : Vector2.zero;
-
-        Vector2 dirTouch = (touchPos - (Vector2)playerPos).normalized;
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+            if (!EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+            {
+                Vector2 touchWorld = _cam.ScreenToWorldPoint(touch.position);
+                return (touchWorld - playerPos).normalized;
+            }
+        }
 
         
         if (gamepadInput.sqrMagnitude > 0.1f) return gamepadInput.normalized;
         if (keyboardInput.sqrMagnitude > 0.1f) return keyboardInput.normalized;
         if (mousePos != Vector2.zero && mousePos != (Vector2)playerPos) return dirMouse;
-        if (touchPos != Vector2.zero && mousePos != (Vector2)playerPos) return dirTouch;
 
         return Vector2.zero;
     }
