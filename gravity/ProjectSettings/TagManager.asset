@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - Asterioid
   layers:
   - Default
   - TransparentFX
@@ -40,6 +41,9 @@ TagManager:
   m_SortingLayers:
   - name: background
     uniqueID: 2483399893
+    locked: 0
+  - name: asteroids
+    uniqueID: 464869121
     locked: 0
   - name: Default
     uniqueID: 0

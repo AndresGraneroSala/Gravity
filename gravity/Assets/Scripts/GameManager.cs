@@ -11,6 +11,7 @@ using UnityEditor;
 
 public class GameManager : MonoBehaviour
 {
+    
     public static GameManager Instance;
 
 #if UNITY_EDITOR
@@ -37,9 +38,10 @@ public class GameManager : MonoBehaviour
 #endif
     }
     
-
+    
     private void Awake()
     {
+        
         Application.targetFrameRate = 145;
 
         if (Instance != null && Instance != this)
@@ -69,6 +71,8 @@ public class GameManager : MonoBehaviour
         }
     }
 #endif
+
+    
 
     public bool isPaused()
     {

@@ -32,6 +32,11 @@ public class PlayerController : MonoBehaviour
 
     public bool IsAiming()
     {
+        if (IsCountering())
+        {
+            return false;
+        }
+        
         Vector2 keyboardInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         Vector2 gamepadInput = Gamepad.current != null ? Gamepad.current.leftStick.ReadValue() : Vector2.zero;
         bool mousePressed = Mouse.current != null && Mouse.current.leftButton.isPressed;

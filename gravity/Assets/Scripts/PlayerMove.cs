@@ -41,6 +41,8 @@ public class PlayerMove : MonoBehaviour
     private void Start()
     {
         
+        
+        
         InitPoolMarkers();
         
         _box = GetComponent<BoxCollider2D>();
@@ -123,7 +125,7 @@ public class PlayerMove : MonoBehaviour
 
     private void HandleInput()
     {
-        bool isAiming = _input.IsAiming();
+        bool isAiming = _input. IsAiming();
         bool isCounter = _input.IsCountering();
 
         if (isAiming||isCounter)
@@ -172,6 +174,13 @@ public class PlayerMove : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (collision.transform.CompareTag("Asterioid"))
+        {
+            GameManager.Instance.RestartGame();
+            return;
+        }
+        
+        
         if (((1 << collision.gameObject.layer) & obstacleLayer) == 0) return;
         if (_currentVelocity.sqrMagnitude < 0.01f) return;
 
