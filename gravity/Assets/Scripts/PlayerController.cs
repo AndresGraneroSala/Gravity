@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using TouchPhase = UnityEngine.TouchPhase;
 
 public class PlayerController : MonoBehaviour
@@ -15,6 +17,9 @@ public class PlayerController : MonoBehaviour
     private bool _uiCounteringRequested;
 
 
+    public GraphicRaycaster raycaster;
+    public EventSystem eventSystem;
+    
     private void Awake()
     {
         mobileInputs.SetActive(false);
@@ -30,13 +35,26 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    
+    bool IsTouchOverUI(Touch touch)
+    {
+        PointerEventData pointerData = new PointerEventData(eventSystem);
+        pointerData.position = touch.position;
+
+        List<RaycastResult> results = new List<RaycastResult>();
+        raycaster.Raycast(pointerData, results);
+
+        return results.Count > 0;
+    }
+
+    private bool _isAimingBefore = false;
     public bool IsAiming()
     {
         if (IsCountering())
         {
             return false;
         }
-        
+
         Vector2 keyboardInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         Vector2 gamepadInput = Gamepad.current != null ? Gamepad.current.leftStick.ReadValue() : Vector2.zero;
         bool mousePressed = Mouse.current != null && Mouse.current.leftButton.isPressed;
@@ -45,9 +63,19 @@ public class PlayerController : MonoBehaviour
         if (touchPressed)
         {
             Touch touch = Input.GetTouch(0);
-            if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
-                touchPressed = false;
+
+            if (!_isAimingBefore)
+            {
+                touchPressed = !IsTouchOverUI(touch);
+                _isAimingBefore = !IsTouchOverUI(touch);
+            }
+            
         }
+        else
+        {
+            _isAimingBefore = false;
+        }
+
 
         return keyboardInput.sqrMagnitude > 0.1f || gamepadInput.sqrMagnitude > 0.01f || mousePressed || touchPressed;
     }
@@ -86,9 +114,7 @@ public class PlayerController : MonoBehaviour
         bool l3 = Gamepad.current != null && Gamepad.current.leftStickButton.isPressed;
 
         bool wasPressed = shift || lb || l3 || _uiCounteringRequested;
-
-        _uiCounteringRequested = false;
-
+        
         return wasPressed;
     }
 
@@ -121,6 +147,12 @@ public class PlayerController : MonoBehaviour
     public void ButtonCounterPressed()
     {
         _uiCounteringRequested = true;
+
+    }
+    
+    public void ButtonCounterUp()
+    {
+        _uiCounteringRequested = false;
 
     }
 }
