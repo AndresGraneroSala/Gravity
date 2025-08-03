@@ -1013,6 +1013,7 @@ GameObject:
   - component: {fileID: 3774765905860706647}
   - component: {fileID: 6962874027021210044}
   - component: {fileID: 5038299514719394981}
+  - component: {fileID: 4181248634799304063}
   m_Layer: 0
   m_Name: But_FullScren
   m_TagString: Untagged
@@ -1121,9 +1122,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7672846132581346527}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: ButtonCounterPressed
+      - m_Target: {fileID: 4181248634799304063}
+        m_TargetAssemblyTypeName: FullscreenToggle, Assembly-CSharp
+        m_MethodName: SetFullscreen
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1133,3 +1134,15 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &4181248634799304063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9216499003035041008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d855bb1ef52bc146a54ec854853c99d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
