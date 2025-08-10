@@ -1124,7 +1124,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4181248634799304063}
         m_TargetAssemblyTypeName: FullscreenToggle, Assembly-CSharp
-        m_MethodName: SetFullscreen
+        m_MethodName: Toggle
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
