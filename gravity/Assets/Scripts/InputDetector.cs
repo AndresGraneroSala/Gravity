@@ -100,8 +100,6 @@ public class InputDetector : MonoBehaviour
     {
         if (currentState == state) return;
         
-        Debug.LogWarning(state.ToString());
-
         currentState = state;
 
         mobileUI?.SetActive(state == InputState.Mobile);
