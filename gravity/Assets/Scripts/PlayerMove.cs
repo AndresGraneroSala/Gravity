@@ -13,10 +13,12 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private int maxJumps = 2;
     [SerializeField, Range(1, 100)] private int maxReflections = 3;
 
-    private int _currentJumps = -1;
+    private int _currentJumps = 0;
     [SerializeField] private Text jumpsText;
     
     [SerializeField] private GameObject impactMarkerPrefab;
+    [SerializeField] private GameObject burdenPrefab;
+    [SerializeField] private GameObject burdenParent;
     private List<GameObject> _markersToDisable= new List<GameObject>();
 
     private Queue<GameObject> _markersQueue = new Queue<GameObject>();
@@ -33,18 +35,16 @@ public class PlayerMove : MonoBehaviour
 
     private BoxCollider2D _box;
     
+    private Queue<GameObject> burdens = new Queue<GameObject>();
+    
     private void Awake()
     {
-        UpdateJumpText();
+        InitJumpsUI();
     }
 
     private void Start()
     {
-        
-        
-        
         InitPoolMarkers();
-        
         _box = GetComponent<BoxCollider2D>();
         if (_box != null)
             _colliderExtent = _box.size * 0.5f;
@@ -68,6 +68,32 @@ public class PlayerMove : MonoBehaviour
 
         _input = GetComponent<PlayerController>();
         if (_input == null) Debug.LogError("Falta PlayerController en el GameObject");
+    }
+
+    private void InitJumpsUI()
+    {
+        _currentJumps = maxJumps;
+        jumpsText.text = _currentJumps.ToString();
+        
+        burdens = new Queue<GameObject>();
+        
+        for (int i = 0; i < maxJumps; i++)
+        {
+            GameObject burden = Instantiate(burdenPrefab, burdenParent.transform, false);
+            burdens.Enqueue(burden);
+        }
+    }
+    
+    private void RestJumpUI() 
+    {
+        _currentJumps--;
+        if (_currentJumps +1 <= 0)
+        {
+            GameManager.Instance.RestartGame();
+            return;
+        }
+        jumpsText.text = _currentJumps.ToString();
+        Destroy(burdens.Dequeue());
     }
 
     private void InitPoolMarkers()
@@ -101,15 +127,7 @@ public class PlayerMove : MonoBehaviour
         return tmpMarker;
     }
 
-    private void UpdateJumpText()
-    {
-        _currentJumps++;
-        if (_currentJumps > maxJumps)
-        {
-            GameManager.Instance.RestartGame();
-        }
-        jumpsText.text = (maxJumps - _currentJumps).ToString();
-    }
+    
 
     private void Update()
     {
@@ -147,7 +165,7 @@ public class PlayerMove : MonoBehaviour
 
         if (_aimDirection != Vector2.zero && _input.IsLaunchPressed() && (isAiming|| isCounter))
         {
-            UpdateJumpText();
+            RestJumpUI();
 
             Vector2 impulse = _aimDirection.normalized * force;
             float dot = Vector2.Dot(_currentVelocity, impulse);
