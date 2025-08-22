@@ -2323,7 +2323,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49584acd5905af9469ab9b26a16c2931, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentState: 2
+  currentState: 3
   mobileUI: {fileID: 1407992639}
   pcUI: {fileID: 17125058}
   gamepadUI: {fileID: 1753787694}
@@ -3371,7 +3371,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4372190182880557326, guid: 02c94948ca4156b4b82daa4ab32a48db, type: 3}
       propertyPath: orthographic size
-      value: 20.10002
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 6573616792730297599, guid: 02c94948ca4156b4b82daa4ab32a48db, type: 3}
       propertyPath: m_LocalPosition.x

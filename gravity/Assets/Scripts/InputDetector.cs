@@ -10,7 +10,8 @@ public class InputDetector : MonoBehaviour
     {
         KeyboardMouse,
         Gamepad,
-        Mobile
+        Mobile,
+        None
     }
 
     [SerializeField] private InputState currentState = InputState.KeyboardMouse;
@@ -26,6 +27,7 @@ public class InputDetector : MonoBehaviour
 
     private void Awake()
     {
+        currentState = InputState.None;
         // Suscribirse a eventos de conexión/desconexión
         InputSystem.onDeviceChange += OnDeviceChange;
 
@@ -97,6 +99,8 @@ public class InputDetector : MonoBehaviour
     private void SetState(InputState state)
     {
         if (currentState == state) return;
+        
+        Debug.LogWarning(state.ToString());
 
         currentState = state;
 
