@@ -289,6 +289,17 @@ Transform:
   - {fileID: 1949518777}
   m_Father: {fileID: 1753787695}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &165506080 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7440478582800978965, guid: 14fa744cddfce3147877a54736a55349, type: 3}
+  m_PrefabInstance: {fileID: 8333835567005289651}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &177712848
 GameObject:
   m_ObjectHideFlags: 0
@@ -570,6 +581,17 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &286171039 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 788324617805027349, guid: 14fa744cddfce3147877a54736a55349, type: 3}
+  m_PrefabInstance: {fileID: 8333835567005289651}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &309559434
 GameObject:
   m_ObjectHideFlags: 0
@@ -2305,8 +2327,8 @@ MonoBehaviour:
   mobileUI: {fileID: 1407992639}
   pcUI: {fileID: 17125058}
   gamepadUI: {fileID: 1753787694}
-  eventSystem: {fileID: 0}
-  raycaster: {fileID: 0}
+  eventSystem: {fileID: 165506080}
+  raycaster: {fileID: 286171039}
 --- !u!1 &1481723513
 GameObject:
   m_ObjectHideFlags: 0
@@ -3349,7 +3371,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4372190182880557326, guid: 02c94948ca4156b4b82daa4ab32a48db, type: 3}
       propertyPath: orthographic size
-      value: 15.1
+      value: 20.10002
       objectReference: {fileID: 0}
     - target: {fileID: 6573616792730297599, guid: 02c94948ca4156b4b82daa4ab32a48db, type: 3}
       propertyPath: m_LocalPosition.x
