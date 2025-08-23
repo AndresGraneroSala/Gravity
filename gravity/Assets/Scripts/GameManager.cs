@@ -127,7 +127,8 @@ public class GameManager : MonoBehaviour
         if (_currentLevel < levelPaths.Length)
             LoadLevelByPath(levelPaths[_currentLevel]);
         else
-            Debug.LogWarning("No hay más niveles.");
+            _currentLevel = 0;
+        LoadLevelByPath(levelPaths[_currentLevel]);
     }
 
     public void LoadLevel(int posLevel)

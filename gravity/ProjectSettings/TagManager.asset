@@ -51,6 +51,9 @@ TagManager:
   - name: Player
     uniqueID: 198296749
     locked: 0
+  - name: Door
+    uniqueID: 2649933179
+    locked: 0
   m_RenderingLayers:
   - Default
   - Layer 1

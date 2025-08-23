@@ -110,7 +110,7 @@ public class PlayerController : MonoBehaviour
     public bool IsCountering()
     {
         bool shift = Keyboard.current != null && Keyboard.current.leftShiftKey.isPressed;
-        bool lb = Gamepad.current != null && Gamepad.current.leftShoulder.isPressed;
+        bool lb = Gamepad.current != null && (Gamepad.current.leftShoulder.isPressed|| Gamepad.current.rightShoulder.isPressed);
         bool l3 = Gamepad.current != null && Gamepad.current.leftStickButton.isPressed;
 
         bool wasPressed = shift || lb || l3 || _uiCounteringRequested;
@@ -121,7 +121,11 @@ public class PlayerController : MonoBehaviour
     public bool IsLaunchPressed()
     {
         bool space = Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame;
-        bool aButton = Gamepad.current != null && Gamepad.current.buttonSouth.wasPressedThisFrame;
+        bool aButton = Gamepad.current != null && (Gamepad.current.buttonSouth.wasPressedThisFrame
+                                                   ||Gamepad.current.buttonNorth.wasPressedThisFrame
+                                                   ||Gamepad.current.buttonEast.wasPressedThisFrame
+                                                   ||Gamepad.current.buttonWest.wasPressedThisFrame
+                                                   );
 
         bool wasPressed = space || aButton || _uiLaunchRequested;
 
