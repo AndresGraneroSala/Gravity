@@ -89,7 +89,7 @@ public class PlayerMove : MonoBehaviour
         _currentJumps--;
         if (_currentJumps +1 <= 0)
         {
-            GameManager.Instance.RestartGame();
+            GameManager.Instance.LooseGame();
             return;
         }
         jumpsText.text = _currentJumps.ToString();
@@ -136,7 +136,7 @@ public class PlayerMove : MonoBehaviour
             GameManager.Instance.TogglePause();
         }
 
-        if (_input == null || GameManager.Instance.isPaused()) return;
+        if (_input == null || GameManager.IsPaused()) return;
         HandleInput();
         MovePlayer();
     }
@@ -194,7 +194,7 @@ public class PlayerMove : MonoBehaviour
     {
         if (collision.transform.CompareTag("Asterioid"))
         {
-            GameManager.Instance.RestartGame();
+            GameManager.Instance.LooseGame();
             return;
         }
         

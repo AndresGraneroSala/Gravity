@@ -2,6 +2,9 @@ using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Runtime.InteropServices;
+using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -22,7 +25,14 @@ public class GameManager : MonoBehaviour
 
     private int _currentLevel = 0;
 
+    [SerializeField] private GameObject menuUI;
 
+    [SerializeField] private GameObject butNextLevel;
+    [SerializeField] private GameObject butResume;
+
+    [SerializeField] private Button butReset;
+    private bool isLoose = false;
+    
 #if UNITY_WEBGL && !UNITY_EDITOR
     [DllImport("__Internal")]
     private static extern int IsMobile();
@@ -38,9 +48,13 @@ public class GameManager : MonoBehaviour
 #endif
     }
     
+    private EventSystem _eventSystem;
+    
     
     private void Awake()
     {
+        FindEventSystem();
+        menuUI.SetActive(false);
         
         Application.targetFrameRate = 145;
 
@@ -52,6 +66,11 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+    }
+
+    private void FindEventSystem()
+    {
+        _eventSystem = EventSystem.current;
     }
 
 #if UNITY_EDITOR
@@ -74,13 +93,80 @@ public class GameManager : MonoBehaviour
 
     
 
-    public bool isPaused()
+    public static bool IsPaused()
     {
         return Time.timeScale == 0;
     }
 
+    enum StateUI
+    {
+        Pause,
+        Loose,
+        Win,
+        None
+    }
+
+    private void ChangeStatusButtons(StateUI state)
+    {
+        if (_eventSystem == null)
+        {
+            FindEventSystem();
+        }
+        
+        if (state == StateUI.None)
+        {
+            menuUI.SetActive(false);
+            Time.timeScale = 1;
+            return;
+        }
+
+        menuUI.SetActive(true);
+        Time.timeScale = 0;
+        
+        butNextLevel.SetActive(false);
+        butResume.SetActive(false);
+
+        SetNavigationInReset(state);
+
+        switch (state)
+        {
+            case StateUI.Pause:
+                butResume.SetActive(true);
+                _eventSystem.SetSelectedGameObject(butResume);
+                return;
+
+            case StateUI.Loose:
+                _eventSystem.SetSelectedGameObject(butReset.gameObject);
+                return;
+
+            case StateUI.Win:
+                butNextLevel.SetActive(true);
+                _eventSystem.SetSelectedGameObject(butNextLevel);
+                return;
+        }
+    }
+
+    private void SetNavigationInReset(StateUI state)
+    {
+        if (state == StateUI.None || state == StateUI.Loose)
+        {
+            return;
+        }
+
+        Navigation resetNavigation = butReset.navigation;
+
+        GameObject but = state == StateUI.Pause ? butResume.gameObject : butNextLevel.gameObject;
+
+        Button tempButUpDown = but.gameObject.GetComponent<Button>();
+        resetNavigation.selectOnUp = tempButUpDown;
+        resetNavigation.selectOnDown = tempButUpDown;
+        butReset.navigation = resetNavigation;
+    }
+
     public void TogglePause()
     {
+        if (isLoose)return;
+        
         if (Time.timeScale == 0)
         {
             Resume();
@@ -93,12 +179,13 @@ public class GameManager : MonoBehaviour
 
     private void Pause()
     {
-        Time.timeScale = 0;
+        ChangeStatusButtons(StateUI.Pause);
+        
     }
 
     private void Resume()
     {
-        Time.timeScale = 1;
+        ChangeStatusButtons(StateUI.None);
     }
 
     public void QuitGame()
@@ -109,16 +196,19 @@ public class GameManager : MonoBehaviour
     public void RestartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        ChangeStatusButtons(StateUI.None);
+        isLoose = false;
     }
 
     public void LooseGame()
     {
-        // Implementar lógica de derrota
+        ChangeStatusButtons(StateUI.Loose);
+        isLoose = true;
     }
 
     public void WinGame()
     {
-        // Implementar lógica de victoria
+        ChangeStatusButtons(StateUI.Win);
     }
 
     public void NextLevel()
@@ -129,6 +219,7 @@ public class GameManager : MonoBehaviour
         else
             _currentLevel = 0;
         LoadLevelByPath(levelPaths[_currentLevel]);
+        ChangeStatusButtons(StateUI.None);
     }
 
     public void LoadLevel(int posLevel)
@@ -154,15 +245,5 @@ public class GameManager : MonoBehaviour
 
         string sceneName = System.IO.Path.GetFileNameWithoutExtension(path);
         SceneManager.LoadScene(sceneName);
-    }
-
-    public void OpenMenu()
-    {
-        // Implementar lógica de menú
-    }
-
-    private void Update()
-    {
-        // Opcional: lógica de actualización
     }
 }
