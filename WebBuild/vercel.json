@@ -1,7 +1,7 @@
 {
   "headers": [
     {
-      "source": "/(.*)\\.br",
+      "source": "/Build/(.*).unityweb",
       "headers": [
         {
           "key": "Content-Encoding",
@@ -14,20 +14,7 @@
       ]
     },
     {
-      "source": "/Build/(.*)\\.js\\.br",
-      "headers": [
-        {
-          "key": "Content-Encoding",
-          "value": "br"
-        },
-        {
-          "key": "Content-Type",
-          "value": "application/javascript"
-        }
-      ]
-    },
-    {
-      "source": "/Build/(.*)\\.wasm\\.br",
+      "source": "/Build/WebGLBuild.wasm.unityweb",
       "headers": [
         {
           "key": "Content-Encoding",
@@ -40,7 +27,7 @@
       ]
     },
     {
-      "source": "/Build/(.*)\\.data\\.br",
+      "source": "/Build/WebGLBuild.data.unityweb",
       "headers": [
         {
           "key": "Content-Encoding",
@@ -49,19 +36,6 @@
         {
           "key": "Content-Type",
           "value": "application/octet-stream"
-        }
-      ]
-    },
-    {
-      "source": "/Build/(.*)\\.symbols\\.json\\.br",
-      "headers": [
-        {
-          "key": "Content-Encoding",
-          "value": "br"
-        },
-        {
-          "key": "Content-Type",
-          "value": "application/json"
         }
       ]
     }
