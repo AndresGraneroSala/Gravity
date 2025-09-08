@@ -3256,10 +3256,18 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2126185375}
+    - target: {fileID: 919399304609568402, guid: 6b365fbf6a45b4b4bb1ab846a802a443, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ButtonLaunchPressed
+      objectReference: {fileID: 0}
     - target: {fileID: 1476378301573708896, guid: 6b365fbf6a45b4b4bb1ab846a802a443, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2126185375}
+    - target: {fileID: 1476378301573708896, guid: 6b365fbf6a45b4b4bb1ab846a802a443, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ButtonLaunchPressed
+      objectReference: {fileID: 0}
     - target: {fileID: 2452256043908597499, guid: 6b365fbf6a45b4b4bb1ab846a802a443, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 

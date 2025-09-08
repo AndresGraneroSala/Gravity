@@ -3312,6 +3312,46 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 919399304609568402, guid: 6b365fbf6a45b4b4bb1ab846a802a443, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8333835567005289652}
+    - target: {fileID: 919399304609568402, guid: 6b365fbf6a45b4b4bb1ab846a802a443, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ButtonLaunchPressed
+      objectReference: {fileID: 0}
+    - target: {fileID: 1476378301573708896, guid: 6b365fbf6a45b4b4bb1ab846a802a443, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8333835567005289652}
+    - target: {fileID: 1476378301573708896, guid: 6b365fbf6a45b4b4bb1ab846a802a443, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ButtonLaunchPressed
+      objectReference: {fileID: 0}
+    - target: {fileID: 2452256043908597499, guid: 6b365fbf6a45b4b4bb1ab846a802a443, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8333835567005289652}
+    - target: {fileID: 2452256043908597499, guid: 6b365fbf6a45b4b4bb1ab846a802a443, type: 3}
+      propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8333835567005289652}
+    - target: {fileID: 2452256043908597499, guid: 6b365fbf6a45b4b4bb1ab846a802a443, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ButtonCounterPressed
+      objectReference: {fileID: 0}
+    - target: {fileID: 2452256043908597499, guid: 6b365fbf6a45b4b4bb1ab846a802a443, type: 3}
+      propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ButtonCounterUp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3913009963461613880, guid: 6b365fbf6a45b4b4bb1ab846a802a443, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8333835567005289652}
+    - target: {fileID: 3913009963461613880, guid: 6b365fbf6a45b4b4bb1ab846a802a443, type: 3}
+      propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8333835567005289652}
     - target: {fileID: 5894036520623350253, guid: 6b365fbf6a45b4b4bb1ab846a802a443, type: 3}
       propertyPath: m_Name
       value: UI info
@@ -4044,6 +4084,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 14fa744cddfce3147877a54736a55349, type: 3}
+--- !u!114 &8333835567005289652 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7672846132581346527, guid: 14fa744cddfce3147877a54736a55349, type: 3}
+  m_PrefabInstance: {fileID: 8333835567005289651}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3347c077deb5aa640af0227a22d46bbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
