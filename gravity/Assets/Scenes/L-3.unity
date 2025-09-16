@@ -1131,11 +1131,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4567054671343956251, guid: d5a8d62ba7b878c4ab96d5bb2ad9197d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 21.61
+      value: 21.42
       objectReference: {fileID: 0}
     - target: {fileID: 4567054671343956251, guid: d5a8d62ba7b878c4ab96d5bb2ad9197d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 9.84
+      value: 5.01
       objectReference: {fileID: 0}
     - target: {fileID: 4567054671343956251, guid: d5a8d62ba7b878c4ab96d5bb2ad9197d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3150,6 +3150,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1961713940}
+    - target: {fileID: 6868423725781887154, guid: 6b365fbf6a45b4b4bb1ab846a802a443, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -1228880059
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3209,7 +3213,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1680847070237029630, guid: bfc4e141099a32f4fb7abc3ce5e0033d, type: 3}
       propertyPath: orthographic size
-      value: 15.200001
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 8327975675026445754, guid: bfc4e141099a32f4fb7abc3ce5e0033d, type: 3}
       propertyPath: target

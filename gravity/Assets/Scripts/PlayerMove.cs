@@ -19,11 +19,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private GameObject impactMarkerPrefab;
     [SerializeField] private GameObject burdenPrefab;
     [SerializeField] private GameObject burdenParent;
-
-
-    [SerializeField] private float contactTolerance = 0.05f;
-
-
+    
     private List<GameObject> _markersToDisable = new List<GameObject>();
 
     private Queue<GameObject> _markersQueue = new Queue<GameObject>();
@@ -219,9 +215,7 @@ public class PlayerMove : MonoBehaviour
 
         if (((1 << collision.gameObject.layer) & obstacleLayer) == 0) return;
         if (_currentVelocity.sqrMagnitude < 0.01f) return;
-
-        print(collision.gameObject.name);
-
+        
 
         ContactPoint2D contact = collision.GetContact(0);
         Vector2 reflectDir = GetDirectionReflected(_currentVelocity.normalized, contact.normal);
