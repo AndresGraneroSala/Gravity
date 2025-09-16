@@ -15,16 +15,21 @@ public class PlayerMove : MonoBehaviour
 
     private int _currentJumps = 0;
     [SerializeField] private Text jumpsText;
-    
+
     [SerializeField] private GameObject impactMarkerPrefab;
     [SerializeField] private GameObject burdenPrefab;
     [SerializeField] private GameObject burdenParent;
-    private List<GameObject> _markersToDisable= new List<GameObject>();
+
+
+    [SerializeField] private float contactTolerance = 0.05f;
+
+
+    private List<GameObject> _markersToDisable = new List<GameObject>();
 
     private Queue<GameObject> _markersQueue = new Queue<GameObject>();
-    
+
     private GameObject _parentMarkers;
-    
+
     private Camera _cam;
     private Rigidbody2D _rb;
     private LineRenderer _lineRenderer;
@@ -34,9 +39,9 @@ public class PlayerMove : MonoBehaviour
     private Vector2 _colliderExtent;
 
     private BoxCollider2D _box;
-    
+
     private Queue<GameObject> burdens = new Queue<GameObject>();
-    
+
     private void Awake()
     {
         InitJumpsUI();
@@ -74,31 +79,32 @@ public class PlayerMove : MonoBehaviour
     {
         _currentJumps = maxJumps;
         jumpsText.text = _currentJumps.ToString();
-        
+
         burdens = new Queue<GameObject>();
-        
+
         for (int i = 0; i < maxJumps; i++)
         {
             GameObject burden = Instantiate(burdenPrefab, burdenParent.transform, false);
             burdens.Enqueue(burden);
         }
     }
-    
-    private void RestJumpUI() 
+
+    private void RestJumpUI()
     {
         _currentJumps--;
-        if (_currentJumps +1 <= 0)
+        if (_currentJumps + 1 <= 0)
         {
             GameManager.Instance.LooseGame();
             return;
         }
+
         jumpsText.text = _currentJumps.ToString();
         Destroy(burdens.Dequeue());
     }
 
     private void InitPoolMarkers()
     {
-        _parentMarkers=new GameObject
+        _parentMarkers = new GameObject
         {
             name = "Markers"
         };
@@ -118,16 +124,17 @@ public class PlayerMove : MonoBehaviour
             Debug.LogError("No hay markers disponibles en la cola!");
             return null;
         }
-        
-        GameObject tmpMarker = _markersQueue.Dequeue();;
+
+        GameObject tmpMarker = _markersQueue.Dequeue();
+        ;
         tmpMarker.SetActive(true);
-        
+
         _markersQueue.Enqueue(tmpMarker);
-        
+
         return tmpMarker;
     }
 
-    
+
 
     private void Update()
     {
@@ -139,14 +146,15 @@ public class PlayerMove : MonoBehaviour
         if (_input == null || GameManager.IsPaused()) return;
         HandleInput();
         MovePlayer();
+
     }
 
     private void HandleInput()
     {
-        bool isAiming = _input. IsAiming();
+        bool isAiming = _input.IsAiming();
         bool isCounter = _input.IsCountering();
 
-        if (isAiming||isCounter)
+        if (isAiming || isCounter)
         {
             _lineRenderer.enabled = true;
             if (isCounter && _currentVelocity.magnitude > 0.1f)
@@ -163,7 +171,7 @@ public class PlayerMove : MonoBehaviour
             ClearImpactMarkers();
         }
 
-        if (_aimDirection != Vector2.zero && _input.IsLaunchPressed() && (isAiming|| isCounter))
+        if (_aimDirection != Vector2.zero && _input.IsLaunchPressed() && (isAiming || isCounter))
         {
             RestJumpUI();
 
@@ -190,6 +198,16 @@ public class PlayerMove : MonoBehaviour
         transform.position += (Vector3)(_currentVelocity * Time.deltaTime);
     }
 
+
+    private Vector2 GetDirectionReflected(Vector2 inDirection, Vector2 inNormal)
+    {
+        return Vector2.Reflect(inDirection, inNormal);
+    }
+
+
+    private int _lastCollisionFrame = -1;
+    private Vector2 _lastPointCollised = Vector2.zero;
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.transform.CompareTag("Asterioid"))
@@ -197,13 +215,16 @@ public class PlayerMove : MonoBehaviour
             GameManager.Instance.LooseGame();
             return;
         }
-        
-        
+
+
         if (((1 << collision.gameObject.layer) & obstacleLayer) == 0) return;
         if (_currentVelocity.sqrMagnitude < 0.01f) return;
 
+        print(collision.gameObject.name);
+
+
         ContactPoint2D contact = collision.GetContact(0);
-        Vector2 reflectDir = Vector2.Reflect(_currentVelocity.normalized, contact.normal);
+        Vector2 reflectDir = GetDirectionReflected(_currentVelocity.normalized, contact.normal);
         var bounce = collision.gameObject.GetComponent<BouncyObstacle>();
         float damping = (bounce != null) ? bounce.bounceDamping : 1f;
 
@@ -211,97 +232,111 @@ public class PlayerMove : MonoBehaviour
         if (newVel.magnitude < minReboundSpeed)
             newVel = reflectDir * minReboundSpeed;
 
+        if (Time.frameCount == _lastCollisionFrame)
+        {
+            if (Mathf.Abs(_lastPointCollised.x - contact.point.x) < 0.05f ||
+                Mathf.Abs(_lastPointCollised.y - contact.point.y) < 0.05f)
+            {
+                return;
+            }
+        }
+
+        _lastCollisionFrame = Time.frameCount;
+
         _currentVelocity = newVel;
-        transform.position += (Vector3)(contact.normal * 0.05f);
+        _lastPointCollised = contact.point;
     }
+
     [SerializeField, Range(0.005f, 0.5f)] private float predictionStep = 0.08f; // distancia del sub-paso
-    [SerializeField, Range(0.0001f, 0.01f)] private float predictionSkin = 0.001f; // “piel” para no tocar
 
-private void DrawPredictionLine(Vector2 dir)
-{
-    if (_box == null || dir == Vector2.zero) return;
+    [SerializeField, Range(0.0001f, 0.01f)]
+    private float predictionSkin = 0.001f; // “piel” para no tocar
 
-    // Limpiar todos los marcadores anteriores
-    ClearImpactMarkers();
-
-    Vector3 s = transform.lossyScale;
-    Vector2 size = new Vector2(_box.size.x * Mathf.Abs(s.x), _box.size.y * Mathf.Abs(s.y));
-    Vector2 origin = _box.bounds.center;
-    Vector2 direction = dir.normalized;
-    float remaining = lineLength;
-
-    List<Vector3> points = new List<Vector3>();
-    points.Add(origin);
-
-    int reflections = 0;
-    int safety = 0;
-    const int safetyMax = 2000;
-
-    while (remaining > 0f && safety++ < safetyMax)
+    private void DrawPredictionLine(Vector2 dir)
     {
-        float step = Mathf.Min(predictionStep, remaining);
-        float castDist = step + predictionSkin;
-        RaycastHit2D hit = Physics2D.BoxCast(origin, size, 0f, direction, castDist, obstacleLayer);
+        if (_box == null || dir == Vector2.zero) return;
 
-        if (hit.collider != null)
+        // Limpiar todos los marcadores anteriores
+        ClearImpactMarkers();
+
+        Vector3 s = transform.lossyScale;
+        Vector2 size = new Vector2(_box.size.x * Mathf.Abs(s.x), _box.size.y * Mathf.Abs(s.y));
+        Vector2 origin = _box.bounds.center;
+        Vector2 direction = dir.normalized;
+        float remaining = lineLength;
+
+        List<Vector3> points = new List<Vector3>();
+        points.Add(origin);
+
+        int reflections = 0;
+        int safety = 0;
+        const int safetyMax = 2000;
+
+        while (remaining > 0f && safety++ < safetyMax)
         {
-            float stopDist = Mathf.Max(0f, hit.distance - predictionSkin);
-            Vector2 stopPoint = origin + direction * stopDist;
+            float step = Mathf.Min(predictionStep, remaining);
+            float castDist = step + predictionSkin;
+            RaycastHit2D hit = Physics2D.BoxCast(origin, size, 0f, direction, castDist, obstacleLayer);
 
-            if ((points[points.Count - 1] - (Vector3)stopPoint).sqrMagnitude > 1e-8f)
-                points.Add(stopPoint);
-
-            // Instanciar marcador de impacto con rotación correcta
-            if (impactMarkerPrefab != null)
+            if (hit.collider != null)
             {
-                GameObject marker = GetMarker();
-                marker.transform.position = stopPoint;
-                
-                _markersToDisable.Add(marker);
+                float stopDist = Mathf.Max(0f, hit.distance - predictionSkin);
+                Vector2 stopPoint = origin + direction * stopDist;
+
+                if ((points[points.Count - 1] - (Vector3)stopPoint).sqrMagnitude > 1e-8f)
+                    points.Add(stopPoint);
+
+                // Instanciar marcador de impacto con rotación correcta
+                if (impactMarkerPrefab != null)
+                {
+                    GameObject marker = GetMarker();
+                    marker.transform.position = stopPoint;
+
+                    _markersToDisable.Add(marker);
+                }
+
+                if (reflections >= maxReflections) break;
+
+                Vector2 newDir = GetDirectionReflected(direction, hit.normal).normalized;
+                var bounce = hit.collider.GetComponent<BouncyObstacle>();
+                if (bounce != null && bounce.bounceDamping < 1f)
+                {
+                    // Lógica de damping (opcional)
+                }
+
+                origin = stopPoint + newDir * predictionSkin;
+                reflections++;
+                direction = newDir;
+                remaining -= stopDist;
+
+                if (stopDist < 1e-5f)
+                {
+                    origin += direction * predictionSkin * 2f;
+                }
+
+                continue;
             }
-
-            if (reflections >= maxReflections) break;
-
-            Vector2 newDir = Vector2.Reflect(direction, hit.normal).normalized;
-            var bounce = hit.collider.GetComponent<BouncyObstacle>();
-            if (bounce != null && bounce.bounceDamping < 1f)
+            else
             {
-                // Lógica de damping (opcional)
+                origin += direction * step;
+                points.Add(origin);
+                remaining -= step;
             }
-
-            origin = stopPoint + newDir * predictionSkin;
-            reflections++;
-            direction = newDir;
-            remaining -= stopDist;
-
-            if (stopDist < 1e-5f)
-            {
-                origin += direction * predictionSkin * 2f;
-            }
-
-            continue;
         }
-        else
-        {
-            origin += direction * step;
-            points.Add(origin);
-            remaining -= step;
-        }
+
+        _lineRenderer.positionCount = points.Count;
+        for (int i = 0; i < points.Count; i++)
+            _lineRenderer.SetPosition(i, points[i]);
     }
-
-    _lineRenderer.positionCount = points.Count;
-    for (int i = 0; i < points.Count; i++)
-        _lineRenderer.SetPosition(i, points[i]);
-}
 
 // Método para limpiar todos los marcadores de impacto
-private void ClearImpactMarkers()
-{
-    foreach (GameObject marker in _markersToDisable)
+    private void ClearImpactMarkers()
     {
-        marker.SetActive(false);
+        foreach (GameObject marker in _markersToDisable)
+        {
+            marker.SetActive(false);
+        }
     }
-}
 
 
     private void OnDrawGizmos()
@@ -323,7 +358,4 @@ private void ClearImpactMarkers()
         Vector3 lossyScale = transform.lossyScale;
         return new Vector3(box.size.x * lossyScale.x, box.size.y * lossyScale.y, 1f);
     }
-
-
-
 }
