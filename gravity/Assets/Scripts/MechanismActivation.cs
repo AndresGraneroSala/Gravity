@@ -44,6 +44,11 @@ public class MechanismActivation : MonoBehaviour
 
     private float GetScaleForLoadBar()
     {
+        if (timeActive==0)
+        {
+            return 1;
+        }
+        
         return 1 /(timeActive / _timer);
     }
 

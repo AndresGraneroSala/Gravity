@@ -181,11 +181,15 @@ MonoBehaviour:
   levels:
   - {fileID: 102900000, guid: 13279196392a83744ba4babe6d22f2fd, type: 3}
   - {fileID: 102900000, guid: d3f761462cdae304faa08c0f231f9838, type: 3}
+  - {fileID: 102900000, guid: 351d968e339d74145b3ab09ef16904a9, type: 3}
+  - {fileID: 102900000, guid: 815cb9d9427043e4bbf5e90a32c14d44, type: 3}
   - {fileID: 102900000, guid: d854b8d02f7fe7243a874da87cca9ca5, type: 3}
   levelPaths:
   - Assets/Scenes/L-0.unity
   - Assets/Scenes/L-1.unity
   - Assets/Scenes/L-2.unity
+  - Assets/Scenes/L-3.unity
+  - Assets/Scenes/L-4.unity
   menuUI: {fileID: 4000071233080898375}
   butNextLevel: {fileID: 6702793183350430978}
   butResume: {fileID: 667083720128160557}
